@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using NuGet.Packaging.Signing;
 
 namespace WebApplication1.Models;
 
@@ -14,4 +15,8 @@ public class Commenti
     [Required]
     public string Commento { get; set; } = null!;
     public bool Pin { get; set; }
+    [Required]
+    public Timestamp Pubblicazione { get; set; }
+    [ForeignKey("IdUtente")]
+    public int IdUtente { get; set; }
 }
