@@ -16,7 +16,9 @@
 </ul>
 
 <center>
+    
 ![Db_Schema](/WebApplication1/Media/Db_diagram_ci.png)
+
 </center>
 
 ### Schema codice (Provvisorio):
