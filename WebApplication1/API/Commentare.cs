@@ -32,8 +32,7 @@ public class Commentare
             //TODO: categorie!!!!!!!!
             
             _context.Add(com);
-            _context.SaveChanges();
-            return true;
+            return 1 == _context.SaveChanges();
         }
         catch (Exception e)
         {
@@ -63,11 +62,18 @@ public class Commentare
 
     public async Task<bool> EliminaCommento(int idCommento)
     {
-        Commenti com = _context.Commentis.First(c => c.Id == idCommento);
+        try
+        {
+            Commenti com = _context.Commentis.First(c => c.Id == idCommento);
 
-        _context.Remove(com);
-        await _context.SaveChangesAsync();
-        return true;
+            _context.Remove(com);
+            await _context.SaveChangesAsync();
+            return true;
+        }catch(Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
     }
 
     public bool RispondiCommento(int idCommento, string commento)
@@ -86,46 +92,123 @@ public class Commentare
         return _context.Commentis.Max(c => c.Id) + 1;
     }
 
-    //Trova tutti i tag all'interno di un commento
+    private int FindIdUtente(string username)
+    {
+        return _context.Utentis.First(u => u.Username != null && u.Username.Equals(username)).Id;
+    }
+
+    //Trova tutti i tag all'interno di un commento, partendo dal presupposta che gli username sono univoci
+    //Id viene quindi mantenuto per avere un valore numerico da utilizzare come chiave esterna e migliorare spazio occupato, ma solo per questo motivo.
     public List<int> FindTags(string commento)
     {
-        throw new NotImplementedException();
+        List<int> tagList = new List<int>();
+        var tags = commento.Split(" ").Where(s => s[0].Equals('@'));
+        foreach (var tag in tags)
+            tagList.Add(FindIdUtente(tag.Substring(1)));
+        return tagList;
     }
 
     public bool TaggaUtente(int idCommento, int idUtente)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Tag_Utenti tu = new Tag_Utenti();
+            tu.IdCommento = idCommento;
+            tu.IdUtente = idUtente;
+
+            _context.Add(tu);
+            return 1 == _context.SaveChanges();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
     }
 
-    public bool EliminaTag(int idCommento)
+    //Elimina tutti i tag associati ad un commento
+    public async Task<bool> EliminaTag(int idCommento)
     {
-        throw new NotImplementedException();
+        try
+        {
+            foreach (var tag in _context.TagUtentis.Where(tag => tag.IdCommento == idCommento))
+                _context.Remove(tag);
+
+            await _context.SaveChangesAsync();
+            return true;
+        }catch(Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
     }
 
     //Riaggiorna i tag presenti in un commento, dopo il suo aggiornamento
     public bool AggiornaTag(int idCommento)
     {
-        throw new NotImplementedException();
+        try{
+            foreach (var idUtente in FindTags(_context.Commentis.First(c => c.Id == idCommento).Commento))
+            {
+                Tag_Utenti tu = new Tag_Utenti();
+                tu.IdCommento = idCommento;
+                tu.IdUtente = idUtente;
+                _context.Add(tu);
+            }
+
+            _context.SaveChanges();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
     }
     
-    public bool StarCommento(int idCommento)
+    public bool StarCommento(int idCommento, int quantityOfStar = 1)
     {
-        throw new NotImplementedException();
+        try{
+            Commenti com = _context.Commentis.First(c => c.Id == idCommento);
+            if (com == null) throw new NullReferenceException("Commento inesistente");
+            com.Star += quantityOfStar;
+
+            _context.Entry(com).State = EntityState.Modified;
+            _context.SaveChanges();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
     }
 
     public bool UnStarCommento(int idCommento)
     {
-        throw new NotImplementedException();
+        return StarCommento(idCommento, -1);
     }
     
-    public bool PinCommento(int idCommento)
+    public bool PinCommento(int idCommento, bool pin = true)
     {
-        throw new NotImplementedException();
+        try{
+            Commenti com = _context.Commentis.First(c => c.Id == idCommento);
+            if (com == null) throw new NullReferenceException("Commento inesistente");
+            com.Pin = pin;
+
+            _context.Entry(com).State = EntityState.Modified;
+            _context.SaveChanges();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
     }
 
     public bool UnpinCommento(int idCommento)
     {
-        throw new NotImplementedException();
+        return PinCommento(idCommento, false);
     }
 
     //Ottieni commenti con vari paramentri
