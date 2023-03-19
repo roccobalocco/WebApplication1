@@ -15,7 +15,7 @@
     </li>
 </ul>
 
-![Db_Schema](/WebApplication1/WebApplication1/Media/Db_diagram_ci.png)
+![Db_Schema](WebApplication1/Media/Db_diagram_ci.png)
 
 ### Schema codice (Provvisorio):
 Nella directory <b>API</b> si trovano le utility che svolgono le operazioni basilari del sito.
