@@ -14,8 +14,15 @@ public class Commentare
         _context = mcc;
     }
     
-    //Insert, modify, delete, reply
     
+    /// <summary>
+    /// Inserisci un commento specificandone i parametri 
+    /// </summary>
+    /// <param name="commento">Stringa da pubblicare come commento</param>
+    /// <param name="categorie">Lista di categorie a cui il commento appartiene - campo opzionale default null</param>
+    /// <param name="pin">Valore binario che determina se fissare il commento - campo opzionale default false</param>
+    /// <param name="idReply">Identificativo del commento a cui si risponde - campo opzionale di default -1</param>
+    /// <returns>true se l'inserimento è andato a buon fine, false altrimenti</returns>
     public bool InserisciCommento(string commento, List<string> categorie = null, bool pin = false, int idReply = -1)
     {
         try
@@ -40,7 +47,14 @@ public class Commentare
             return false;
         }
     }
-
+    
+    /// <summary>
+    /// Modifica un commento pre-esistente specificandone i parametri 
+    /// </summary>
+    /// <param name="idCommento">Identificativo del commento nel database</param>
+    /// <param name="commento">Lista di categorie a cui il commento appartiene - campo opzionale default null</param>
+    /// <param name="pin">Valore binario che determina se fissare il commento - campo opzionale default false</param>
+    /// <returns>true se l'inserimento è andato a buon fine, false altrimenti</returns>
     public bool ModificaCommento(int idCommento, string commento, bool pin = false)
     {
         try{
@@ -59,7 +73,12 @@ public class Commentare
             return false;
         }
     }
-
+    
+    /// <summary>
+    /// Elimina un commento pre-esistente, i tag ad esso collegati e anche le riposte a tale commento 
+    /// </summary>
+    /// <param name="idCommento">Identificativo del commento nel database</param>
+    /// <returns>true se la cancellazione è andato a buon fine, false altrimenti</returns>
     public async Task<bool> EliminaCommento(int idCommento)
     {
         try
@@ -67,8 +86,9 @@ public class Commentare
             Commenti com = _context.Commentis.First(c => c.Id == idCommento);
 
             _context.Remove(com);
+            
             await _context.SaveChangesAsync();
-            return true;
+            return await EliminaCommentiCollegati(idCommento) && await EliminaTag(idCommento);
         }catch(Exception e)
         {
             Console.WriteLine(e.StackTrace);
@@ -76,6 +96,34 @@ public class Commentare
         }
     }
 
+    private async Task<bool> EliminaCommentiCollegati(int idCommento)
+    {
+        try
+        {
+            foreach (var com in _context.Commentis.Where(c => c.Reply == idCommento))
+            {
+                _context.Remove(com);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.StackTrace);
+            return false;
+        }
+    }
+    
+    /// <summary>
+    /// Inserisci un commento come risposta di un altro, specificandone i parametri 
+    /// </summary>
+    /// <param name="idCommento">Identificativo del commento a cui rispondere nel database</param>
+    /// <param name="commento">Stringa da pubblicare come commento</param>
+    /// <param name="categorie">Lista di categorie a cui il commento appartiene - campo opzionale default null</param>
+    /// <param name="pin">Valore binario che determina se fissare il commento - campo opzionale default false</param>
+    /// <param name="idReply">Identificativo del commento a cui si risponde - campo opzionale di default -1</param>
+    /// <returns>true se l'inserimento è andato a buon fine, false altrimenti</returns>
     public bool RispondiCommento(int idCommento, string commento)
     {
         return InserisciCommento(commento, idReply:idCommento);
@@ -126,7 +174,11 @@ public class Commentare
         }
     }
 
-    //Elimina tutti i tag associati ad un commento
+    /// <summary>
+    /// Elimina tutti i tag associati ad un commento 
+    /// </summary>
+    /// <param name="idCommento">Identificativo del commento nel database</param>
+    /// <returns>true se l'inserimento è andato a buon fine, false altrimenti</returns>
     public async Task<bool> EliminaTag(int idCommento)
     {
         try
