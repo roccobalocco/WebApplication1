@@ -1,9 +1,41 @@
 ﻿@{
     ViewData["Title"] = "Logged in";
     var user = ViewData["Username"];
+    var id = ViewData["Id"];
 }
-
+<script>nascondiInvio(@id) </script>
 @model LoginModels
 <div class="text-center">
     <p> Hello user [@user]</p>
+    <div id="Invia-commenti">
+        Pubblica commento:
+        <form name="InviaCommento" id="InviaCommento" asp-action="InviaCommento" asp-controller="Success">
+            <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Commento" class="control-label"></label>
+                            <input asp-for="Commento" class="form-control" placeholder="Commento" />
+                            <span asp-validation-for="Commento" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Pin" class="control-label"></label>
+                            <input asp-for="Pin" class="form-check" placeholder="Pin" />
+                            <span asp-validation-for="Pin" class="text-danger"></span>
+                        </div>    
+                        <br/>
+                        <div class="form-group">
+                            <input type="submit" value="Login" class="btn btn-primary" />
+                        </div>
+        </form>
+    </div>
+    <div id="Filtra-commenti">
+        Filtri:
+    </div>
 </div>
+
+<!-- 
+<div id="Vista-commenti">
+    <aside id="Profilo-commento"></aside>
+    <div id="Corpo-commento"></div>
+    <div id="Risposte-commento"></div>
+</div>
+-->

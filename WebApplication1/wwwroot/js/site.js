@@ -14,3 +14,13 @@ function login(username , password){
     logged.setAttribute("style", "display : block;")
 }
 
+function listaCommenti(){
+
+}
+
+function nascondiInvio(id){
+    if (id === -1)
+        this.document.getElementById("Invia-commenti").setAttribute("style", "display: none;");
+    //TODO: Nascondi possibilità di risposta
+}
+

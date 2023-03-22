@@ -14,4 +14,8 @@ public class SuccessController : Controller
         _context = context;
     }
 
+    public IActionResult InviaCommento()
+    {
+        throw new NotImplementedException();
+    }
 }
