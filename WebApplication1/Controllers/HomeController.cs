@@ -26,21 +26,19 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> Login(LoginModels model)
+    public Task<IActionResult> Login(LoginModels model)
     {
-        if (!ModelState.IsValid | model.Username.Length == 0 | model.Password.Length == 0)
-            return RedirectToAction("Index");
+        if (model is { Password: { }, Username: { } } && !ModelState.IsValid | model.Username.Length == 0 | model.Password.Length == 0)
+            return Task.FromResult<IActionResult>(RedirectToAction("Index"));
 
         Console.WriteLine("Login per utente {0}", model.Username);
-        if (model.TryLogin(_context, model.Username, model.Password))
-            return RedirectToAction("Success");
-
-        return RedirectToAction("Index");
+        return Task.FromResult<IActionResult>(model.TryLogin(_context, model.Username, model.Password) ? RedirectToAction("Success") : RedirectToAction("Index"));
     }
 
     public IActionResult Success()
     {
         ViewData["Username"] = UtenteSingleton.GetInstance().Username;
+        ViewData["Id"] = UtenteSingleton.GetInstance().Id;
         return View();
     }
     
@@ -50,9 +48,10 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public IActionResult GuestLogin()
+    [HttpPost]
+    public Task<IActionResult> GuestLogin(LoginModels model)
     {
-
-        return RedirectToAction("Success");
+        model.GuestLogin();
+        return Task.FromResult<IActionResult>(RedirectToAction("Success"));
     }
 }
