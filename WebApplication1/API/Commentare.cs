@@ -33,7 +33,7 @@ public class Commentare
             com.Pin = pin;
             com.Star = 0;
             com.IdUtente = UtenteSingleton.GetInstance().Id;
-            com.Pubblicazione = new Timestamp();
+            com.Pubblicazione = new DateTime();
             if (idReply != -1)
                 com.Reply = idReply;
             //TODO: categorie!!!!!!!!

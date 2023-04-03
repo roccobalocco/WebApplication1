@@ -11,21 +11,24 @@
         <form name="InviaCommento" id="InviaCommento" asp-action="InviaCommento" asp-controller="Success">
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Commento" class="control-label"></label>
+                <label asp-for="Commento" class="control-label">Inserisci un commento:</label>
                 <input asp-for="Commento" class="form-control" placeholder="Commento" />
                 <span asp-validation-for="Commento" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Pin" class="control-label"></label>
-                <input asp-for="Pin" class="form-check" placeholder="Pin" />
-                <span asp-validation-for="Pin" class="text-danger"></span>
+                <label asp-for="Pin" class="control-label">Fissare il commento?</label>
+                <input asp-for="Pin" class="form-check" placeholder="Pin"/>
+                <span asp-validation-for="Pin" class="text-danger">
+                    Se l'utente é amministratore potrá fissare il commento per tutti, altrimenti verrá fissato solamente sul rispettivo profilo
+                </span>
             </div>    
             <br/>
             <div class="form-group">
-                <input type="submit" value="Login" class="btn btn-primary" />
+                <input type="submit" value="Invia" class="btn btn-primary" />
             </div>
         </form>
     </div>
+    <br/>
     <div id="Filtra-commenti">
         Filtri:
     </div>

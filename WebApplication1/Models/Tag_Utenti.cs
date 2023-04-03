@@ -1,12 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
 namespace WebApplication1.Models;
 
 [Table("Tag_Utenti")]
+[PrimaryKey(nameof(IdUtente), nameof(IdCommento))]
 public class Tag_Utenti
 {
-    [Key, ForeignKey("IdUtente")]
+    [ForeignKey("IdUtente")]
     public int IdUtente { get; set; }
-    [Key, ForeignKey(("IdCommento"))]
+    [ForeignKey(("IdCommento"))]
     public int IdCommento { get; set; }
 }

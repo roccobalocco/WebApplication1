@@ -22,8 +22,8 @@ namespace WebApplication1.Models
                     .SetBasePath(Directory.GetCurrentDirectory())
                     .AddJsonFile("appsettings.json")
                     .Build();
-                //var connectionString = configuration.GetConnectionString("MvcCoseinutiliContext");
-                var connectionString = configuration.GetConnectionString("MvcCoseinutiliContextPortatile");
+                var connectionString = configuration.GetConnectionString("MvcCoseinutiliContext");
+                //var connectionString = configuration.GetConnectionString("MvcCoseinutiliContextPortatile");
                 optionsBuilder.UseSqlServer(connectionString, builder =>
                 {
                     builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);

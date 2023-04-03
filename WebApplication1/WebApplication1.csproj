@@ -25,4 +25,10 @@
       <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="..\..\..\Pictures\Db_diagram_ci.png">
+        <Link>Media\Db_diagram_ci.png</Link>
+      </Content>
+    </ItemGroup>
+
 </Project>

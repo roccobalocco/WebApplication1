@@ -13,4 +13,6 @@ public class Utenti
     public string? Username { get; set; }
     [Column("Password"), Required, MaxLength(50, ErrorMessage = "Max 50 chars for Username")]
     public string? Password { get; set; }
+    [Column("Admin"), Required]
+    public bool Admin { get; set; }
 }
