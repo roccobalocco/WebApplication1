@@ -1,0 +1,52 @@
+﻿@using WebApplication1.API
+@using System.Runtime.InteropServices.JavaScript
+
+<div id="Filtra-commenti">
+    Filtri per commenti...:
+</div>
+<hr/>
+
+<div id="Lista-commenti">
+    Lista di commenti:
+    <br/>
+    @{
+        var mcc = new AppDbContextFactory().CreateDbContext(new string[] { });
+        var cmtUtil = new Commentare(mcc);
+        <table id="Tabella-commenti" class="table">
+            <thead> <tr> <th scope="col"> Utente </th> <th scope="col"> Commento </th></tr></thead>
+            @foreach (var comment in cmtUtil.GetCommenti())
+            {
+                <tr class="Vista-commento d-table-row">
+                    <td> <!-- profilo -->
+                        @Html.DisplayName(cmtUtil.GetUsername(comment.IdUtente))
+                    </td>
+                    <td> <!-- commento -->
+                        @Html.DisplayName(comment.Commento)
+                    </td>
+                </tr>
+                RecursiveReply(cmtUtil, comment.Id, 1);
+            }
+            </table>
+    }
+</div>
+
+@functions
+{
+    public void RecursiveReply(Commentare cmtUtil, int idCommento, int counter)
+    {
+        foreach (var reply in cmtUtil.GetReplies(idCommento))
+        {
+            <tr>
+                @for (int i = 0; i < counter; i++)
+                {
+                    <td> &nbsp; &nbsp; </td>
+                }
+                <td> @Html.DisplayName(cmtUtil.GetUsername(reply.IdUtente)) </td>
+                <td> @Html.DisplayName(reply.Commento) </td>
+            </tr>
+            RecursiveReply(cmtUtil, reply.Reply, counter++);
+        }
+    }
+}
+
+

@@ -15,7 +15,11 @@ public class LoginModels
         List<Utenti> lu = context.Utentis.Where(u => u.Password != null && u.Username != null && u.Username.Equals(user) && u.Password.Equals(pwd)).ToList();
         if (lu.Count != 1) return false;
         var username = lu[0].Username;
-        if (username != null) UtenteSingleton.GetInstance(lu[0].Id, username);
+        if (username != null)
+        {
+            UtenteSingleton.GetInstance(lu[0].Id, username);
+            UtenteSingleton.SetInstance(lu[0].Id, username);
+        }
         Console.WriteLine("Utente loggato e registrato nel singleton");
         return true;
     }
@@ -29,6 +33,7 @@ public class LoginModels
     public void GuestLogin()
     {
         UtenteSingleton.GetInstance();
+        UtenteSingleton.SetInstance();
         Console.WriteLine("Utente loggato come ospite e registrato nel  singleton");
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using NuGet.Packaging.Signing;
 using WebApplication1.Models;
@@ -327,8 +328,13 @@ public class Commentare
         return result;
     }
 
-    public Microsoft.EntityFrameworkCore.DbSet<Commenti>? GetCommentiPinned()
+    public IOrderedQueryable<Commenti> GetCommentiPinned()
     {
-        return (DbSet<Commenti>)_context.Commentis.Where(c => c.Pin).OrderBy(c => c.Pubblicazione);
+        return _context.Commentis.Where(c => c.Pin).OrderBy(c => c.Pubblicazione);
+    }
+
+    public IQueryable<Commenti> GetReplies(int idCommento)
+    {
+        return _context.Commentis.Where(cmt => cmt.Id != idCommento && cmt.Reply == idCommento);
     }
 }

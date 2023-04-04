@@ -1,4 +1,6 @@
-﻿namespace WebApplication1.Models;
+﻿using System.Diagnostics;
+
+namespace WebApplication1.Models;
 
 public class UtenteSingleton
 {
@@ -34,5 +36,18 @@ public class UtenteSingleton
             _instance ??= new UtenteSingleton();
         
         return _instance;
+    }
+
+    public static void SetInstance()
+    {
+        Debug.Assert(_instance != null, nameof(_instance) + " != null");
+        _instance.Id = -1;
+        _instance.Username = "guest";
+    } 
+    public static void SetInstance(int id, string user)
+    {
+        Debug.Assert(_instance != null, nameof(_instance) + " != null");
+        _instance.Id = id;
+        _instance.Username = user;
     }
 }

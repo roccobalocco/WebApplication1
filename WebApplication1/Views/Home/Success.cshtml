@@ -1,4 +1,11 @@
-﻿@{
+﻿<script>
+function nascondiInvio(id){
+    console.log(`ID uguale a ${id} con tipo ${typeof(id)}`)
+    if (id === -1)
+        this.document.getElementById("Invia-commenti").setAttribute("style", "display: none;")
+} 
+</script>
+@{
     ViewData["Title"] = "Logged in";
     var inserimento = ViewData["Inserimento"];
     var user = ViewData["Username"];
@@ -35,24 +42,8 @@
         </form>
     </div>
     <hr/>
-    <div id="Filtra-commenti">
-        Filtri per commenti...:
-    </div>
-    <hr/>
-    @await Html.PartialAsync("Success/Commenti")
+    @await Html.PartialAsync("Commenti")
 </div>
 <script>
-    function nascondiInvio(id){
-        console.log(`ID uguale a ${id} con tipo ${typeof(id)}`)
-        if (id === -1)
-            this.document.getElementById("Invia-commenti").setAttribute("style", "display: none;")
-    } 
-    window.onload = nascondiInvio(@iden)
+    window.onload = nascondiInvio(@iden);
 </script>
-<!-- 
-<div id="Vista-commenti">
-    <aside id="Profilo-commento"></aside>
-    <div id="Corpo-commento"></div>
-    <div id="Risposte-commento"></div>
-</div>
--->
