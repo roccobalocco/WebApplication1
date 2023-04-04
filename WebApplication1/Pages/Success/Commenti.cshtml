@@ -1,0 +1,31 @@
+﻿@model dynamic
+@using WebApplication1.API
+<div id="Lista-commenti">
+    Lista di commenti...:
+    <br/>
+    @{
+        var mcc = new AppDbContextFactory().CreateDbContext(new string[] { });
+        var cmtUtil = new Commentare(mcc);
+        <table id="Tabella-commenti" class="table">
+            <thead> <tr> <th scope="col"> Utente </th> <th scope="col"> Commento </th></tr></thead>
+            @foreach (var comment in cmtUtil.GetCommenti())
+            {
+                <tr class="Vista-commento d-table-row">
+                    <td> <!-- profilo -->
+                        @Html.DisplayName(cmtUtil.GetUsername(comment.IdUtente))
+                    </td>
+                    <td> <!-- commento -->
+                        @Html.DisplayName(comment.Commento)
+                    </td>
+                    <!-- <tr>
+                        <td class="d-lg-table-cell">  risposte commento 
+                
+                        </td>
+                    </tr> -->
+                </tr>
+                
+            }
+        </table>
+    }
+</div>
+

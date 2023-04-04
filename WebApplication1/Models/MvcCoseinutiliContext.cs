@@ -6,8 +6,8 @@ namespace WebApplication1.Models
 {
     public class MvcCoseinutiliContext : DbContext
     {
-        public MvcCoseinutiliContext(DbContextOptions<MvcCoseinutiliContext> options) : base(options) { }
-
+        public MvcCoseinutiliContext(DbContextOptions options) : base(options) { }
+        
         public DbSet<Utenti> Utentis { get; set; }
         public DbSet<Commenti> Commentis { get; set; }
         public DbSet<Categorie> Categories { get; set; }

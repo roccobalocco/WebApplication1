@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Logged in";
+    var inserimento = ViewData["Inserimento"];
     var user = ViewData["Username"];
     var iden = ViewData["Id"];
 }
@@ -12,8 +13,13 @@
             <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Commento" class="control-label">Inserisci un commento:</label>
-                <input asp-for="Commento" class="form-control" placeholder="Commento" />
-                <span asp-validation-for="Commento" class="text-danger"></span>
+                <textarea asp-for="Commento" class="form-control" placeholder="Commento"></textarea>
+                <span asp-validation-for="Commento" class="text-danger">
+                    @{
+                        if (inserimento != null)
+                            @Html.DisplayName((string)inserimento)
+                    }
+                </span>
             </div>
             <div class="form-group">
                 <label asp-for="Pin" class="control-label">Fissare il commento?</label>
@@ -28,12 +34,13 @@
             </div>
         </form>
     </div>
-    <br/>
+    <hr/>
     <div id="Filtra-commenti">
-        Filtri:
+        Filtri per commenti...:
     </div>
+    <hr/>
+    @await Html.PartialAsync("Success/Commenti")
 </div>
-
 <script>
     function nascondiInvio(id){
         console.log(`ID uguale a ${id} con tipo ${typeof(id)}`)

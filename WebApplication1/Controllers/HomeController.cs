@@ -6,6 +6,7 @@ namespace WebApplication1.Controllers;
 
 public class HomeController : Controller
 {
+    //todo: use logger
     private readonly ILogger<HomeController> _logger;
     private readonly MvcCoseinutiliContext _context;
 
@@ -32,11 +33,12 @@ public class HomeController : Controller
             return Task.FromResult<IActionResult>(RedirectToAction("Index"));
 
         Console.WriteLine("Login per utente {0}", model.Username);
-        return Task.FromResult<IActionResult>(model.TryLogin(_context, model.Username, model.Password) ? RedirectToAction("Success") : RedirectToAction("Index"));
+        return Task.FromResult<IActionResult>(model is { Password: { }, Username: { } } && model.TryLogin(_context, model.Username, model.Password) ? RedirectToAction("Success") : RedirectToAction("Index"));
     }
 
     public IActionResult Success()
     {
+        ViewData["Inserimento"] = null;
         ViewData["Username"] = UtenteSingleton.GetInstance().Username;
         ViewData["Id"] = UtenteSingleton.GetInstance().Id;
         return View();

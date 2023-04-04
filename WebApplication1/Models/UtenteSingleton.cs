@@ -2,9 +2,9 @@
 
 public class UtenteSingleton
 {
-    private static UtenteSingleton _instance = null; 
+    private static UtenteSingleton? _instance; 
 
-    private static Object _mutex = new Object();
+    private static object _mutex = new();
 
     public int Id;
     public string Username;
@@ -19,34 +19,20 @@ public class UtenteSingleton
         Id = -1;
         Username = "guest";
     }
-    public static UtenteSingleton GetInstance(int id, string user)
-    { 
-        if (_instance == null) 
-        { 
-            lock (_mutex) // now I can claim some form of thread safety...
-            {
-                if (_instance == null) 
-                { 
-                    _instance = new UtenteSingleton(id, user);
-                }
-            } 
-        }
+    public static UtenteSingleton? GetInstance(int id, string user)
+    {
+        if (_instance != null) return _instance;
+        lock (_mutex) // now I can claim some form of thread safety...
+            _instance ??= new UtenteSingleton(id, user);
 
         return _instance;
     }
     public static UtenteSingleton GetInstance()
-    { 
-        if (_instance == null) 
-        { 
-            lock (_mutex) // now I can claim some form of thread safety...
-            {
-                if (_instance == null) 
-                { 
-                    _instance = new UtenteSingleton();
-                }
-            } 
-        }
-
+    {
+        if (_instance != null) return _instance;
+        lock (_mutex) // now I can claim some form of thread safety...
+            _instance ??= new UtenteSingleton();
+        
         return _instance;
     }
 }

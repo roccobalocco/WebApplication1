@@ -19,10 +19,16 @@ public class LoginModels
         Console.WriteLine("Utente loggato e registrato nel singleton");
         return true;
     }
+
+    public DbSet<Commenti> GetCommentis(MvcCoseinutiliContext context)
+    {
+        Console.WriteLine("Accedo ai commenti");
+        return context.Commentis; 
+    }
     
     public void GuestLogin()
     {
-        UtenteSingleton.GetInstance(-1, "Guest");
+        UtenteSingleton.GetInstance();
         Console.WriteLine("Utente loggato come ospite e registrato nel  singleton");
     }
 }

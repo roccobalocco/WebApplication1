@@ -32,8 +32,9 @@ public class Commentare
             com.Commento = commento;
             com.Pin = pin;
             com.Star = 0;
-            com.IdUtente = UtenteSingleton.GetInstance().Id;
+            com.IdUtente = UtenteSingleton.GetInstance()!.Id;
             com.Pubblicazione = new DateTime();
+            com.Reply = com.Id;
             if (idReply != -1)
                 com.Reply = idReply;
             //TODO: categorie!!!!!!!!
@@ -133,11 +134,26 @@ public class Commentare
     //Trova prossimo id da inserire, riguardo tutte le tabelle possibili:
     private int NextIdUtente()
     {
-        return _context.Utentis.Max(u => u.Id) + 1;
+        try
+        {
+            return _context.Utentis.Max(u => u.Id) + 1;
+        }
+        catch (InvalidOperationException e)
+        {
+            Console.WriteLine("Primo commento inserito");
+            return 1;
+        }
     }
     private int NextIdCommento()
     {
-        return _context.Commentis.Max(c => c.Id) + 1;
+        try{
+            return _context.Commentis.Max(c => c.Id) + 1;
+        }
+        catch (InvalidOperationException e)
+        {
+            Console.WriteLine("Primo commento inserito");
+            return 1;
+        }
     }
 
     private int FindIdUtente(string username)
@@ -270,6 +286,11 @@ public class Commentare
         return _context.Commentis;
     }
 
+    public string? GetUsername(int idUtente)
+    {
+        return _context.Utentis.First(u => u.Id == idUtente).Username;
+    }
+
     public DbSet<Commenti>? GetCommenti(int idUtente)
     {
         return _context.Commentis.Where(c => c.IdUtente == idUtente) as Microsoft.EntityFrameworkCore.DbSet<Commenti>;
@@ -308,6 +329,6 @@ public class Commentare
 
     public Microsoft.EntityFrameworkCore.DbSet<Commenti>? GetCommentiPinned()
     {
-        return _context.Commentis.Where(c => c.Pin).OrderBy(c => c.Pubblicazione) as Microsoft.EntityFrameworkCore.DbSet<Commenti>;
+        return (DbSet<Commenti>)_context.Commentis.Where(c => c.Pin).OrderBy(c => c.Pubblicazione);
     }
 }
